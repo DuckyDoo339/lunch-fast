@@ -1,0 +1,9 @@
+<div class="toolbar">
+  <label for="selected-rider">ไรเดอร์</label>
+  <select id="selected-rider" aria-label="เลือกไรเดอร์เพื่อดูใบงาน" (change)="select($event)">
+    @for (r of state.riders(); track r.id) {
+      <option [value]="r.id" [selected]="state.selected() === r.id">{{ r.name }} · LF-R{{ r.id + 1 }}</option>
+    }
+  </select>
+  <span class="sub">ดูใบงานและเส้นทางที่มอบหมาย</span>
+</div>

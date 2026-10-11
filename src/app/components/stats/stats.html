@@ -1,0 +1,15 @@
+<div class="stats">
+  @for (card of cards(); track card.label; let i = $index) {
+    <div
+      class="card"
+      [attr.tabindex]="links() ? 0 : null"
+      [attr.role]="links() ? 'button' : null"
+      (click)="go(i)"
+      (keydown)="key($event, i)"
+    >
+      <div class="stat-top">{{ card.label }}<span class="stat-icon"><app-icon [name]="card.icon" /></span></div>
+      <div class="value">{{ card.value }}<small>{{ card.unit }}</small></div>
+      <span class="sub">{{ card.foot }}</span>
+    </div>
+  }
+</div>

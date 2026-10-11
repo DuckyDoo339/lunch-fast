@@ -1,0 +1,112 @@
+<div class="layout">
+  <aside id="sidebar" [class.open]="sidebarOpen()">
+    <div class="brand">
+      <i><app-icon name="navigation" /></i>
+      <div>LunchFlow<small>ส่งด่วนมื้อเที่ยง</small></div>
+    </div>
+    <div class="workspace-card">
+      <app-icon name="store" />
+      <div>ร้านอาหาร · มมส.<span>จัดการรอบส่งมื้อเที่ยง</span></div>
+    </div>
+    <div class="navlabel">YOUR WORKSPACE</div>
+    <nav id="nav">
+      @for (m of state.role() === 'rider' ? riderMenus : ownerMenus; track m.page) {
+        <button
+          [class.active]="nav.page() === m.page"
+          [attr.aria-current]="nav.page() === m.page ? 'page' : null"
+          (click)="go(m.page)"
+        >
+          <app-icon [name]="m.page" />{{ m.label }}
+        </button>
+      }
+    </nav>
+    <div class="sidebar-space"></div>
+    <div class="sidebottom">
+      <strong>มื้อเที่ยงที่ตรงเวลา</strong>
+      <span class="deadline">12:30 <small style="font-size:11px">น.</small></span>
+      <div class="progress"><span></span></div>
+      เริ่มออกส่ง {{ state.settings().depart }} น.<br />พร้อมส่งอาหารให้ทุกจุด
+    </div>
+  </aside>
+  <main>
+    <header>
+      <div class="header-brand">
+        <div class="brand">
+          <i><app-icon name="navigation" /></i>
+          <div>LunchFlow<small>RIDER WORKSPACE</small></div>
+        </div>
+      </div>
+      <div>
+        <button class="hamburger" (click)="sidebarOpen.set(!sidebarOpen())" aria-label="เปิดเมนู"><app-icon name="menu" /></button>
+        <span class="crumb">Workspace &nbsp; / &nbsp; <strong>{{ nav.crumb() }}</strong></span>
+      </div>
+      <div class="header-right">
+        <span class="restaurant-stamp"><app-icon name="store" /> MSU · มหาสารคาม</span>
+        <div class="context-switch" aria-label="สลับพื้นที่ทำงาน">
+          <button
+            [class.current]="state.role() === 'owner'"
+            [attr.aria-pressed]="state.role() === 'owner'"
+            (click)="switchWorkspace('owner')"
+          >
+            <app-icon name="store" /> ร้านค้า
+          </button>
+          <button
+            [class.current]="state.role() === 'rider'"
+            [attr.aria-pressed]="state.role() === 'rider'"
+            (click)="switchWorkspace('rider')"
+          >
+            <app-icon name="rider" /> ไรเดอร์
+          </button>
+        </div>
+        <div class="avatar">{{ state.role() === 'rider' ? 'RD' : 'LF' }}</div>
+      </div>
+    </header>
+    <div class="content" id="app">
+      @switch (nav.page()) {
+        @case ('dashboard') {
+          <app-dashboard />
+        }
+        @case ('customers') {
+          <app-customers />
+        }
+        @case ('orders') {
+          <app-orders />
+        }
+        @case ('routes') {
+          <app-routes-page />
+        }
+        @case ('reports') {
+          <app-reports />
+        }
+        @case ('jobs') {
+          <app-jobs />
+        }
+        @case ('navigation') {
+          <app-navigation-page />
+        }
+        @case ('delivery') {
+          <app-delivery />
+        }
+      }
+      <footer>
+        <span>LunchFlow · {{ state.role() === 'rider' ? 'Rider Workspace' : 'Restaurant Workspace' }}</span>
+        <span>ข้อมูลตัวอย่าง · บันทึกในเบราว์เซอร์</span>
+      </footer>
+    </div>
+  </main>
+</div>
+<app-dialog />
+<div id="toast" class="toast" [hidden]="!toast.visible()">{{ toast.message() }}</div>
+<nav id="rider-bottom" class="rider-bottom">
+  @if (state.role() === 'rider') {
+    @for (m of riderMenus; track m.page) {
+      <button
+        (click)="go(m.page)"
+        [class.active]="nav.page() === m.page"
+        [attr.aria-current]="nav.page() === m.page ? 'page' : null"
+      >
+        <app-icon [name]="m.page" /><span>{{ riderLabel(m.page) }}</span>
+      </button>
+    }
+  }
+</nav>

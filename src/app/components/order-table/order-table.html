@@ -1,0 +1,42 @@
+<div class="tablewrap">
+  <table>
+    <thead>
+      <tr>
+        <th>เลขออเดอร์</th>
+        <th>ลูกค้า / จุดส่ง</th>
+        <th>จำนวน</th>
+        <th>ยอดขาย</th>
+        <th>ไรเดอร์</th>
+        <th>สถานะ</th>
+        @if (actions()) {
+          <th>จัดการ</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (o of orders(); track o.id) {
+        <tr>
+          <td class="orderid">#LF-{{ o.id }}</td>
+          <td>
+            {{ name(o) }}
+            <div class="sub" style="margin-top:4px">{{ address(o) }}</div>
+          </td>
+          <td>{{ o.boxes }} กล่อง</td>
+          <td>฿{{ state.money(o.boxes * 65) }}</td>
+          <td>{{ rider(o.id) }}</td>
+          <td><app-badge [status]="o.status" /></td>
+          @if (actions()) {
+            <td>
+              <button class="small secondary" (click)="edit(o.id)">แก้ไข</button>&nbsp;
+              <button class="small secondary" (click)="remove(o.id)">ลบ</button>
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty">ไม่พบออเดอร์</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

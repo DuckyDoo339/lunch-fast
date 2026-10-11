@@ -1,0 +1,57 @@
+<div class="mobile-shell">
+  <app-title-block title="ใบงานของฉัน" sub="ตรวจสอบอาหารก่อนออกส่ง และทำตามลำดับจุด" />
+  <app-rider-select />
+
+  <section class="card rider-jobhero">
+    <div class="section-head">
+      <div class="rider-greeting">
+        <div class="rider-avatar">{{ riderName()[0] }}</div>
+        <div>
+          <h2>สวัสดี {{ riderName() }}</h2>
+          <div style="color:#a9cbb8;font-size:10px;margin-top:7px">{{ statusText() }}</div>
+        </div>
+      </div>
+      <span class="badge">LF-R{{ state.selected() + 1 }}</span>
+    </div>
+    <div class="value">
+      {{ boxes() }}<small style="color:#a9cbb8;font-size:12px;margin-left:10px">กล่องที่ต้องรับ</small>
+    </div>
+    <div class="job-meta">
+      <div>จุดส่งทั้งหมด<strong>{{ ids().length }} จุด · สำเร็จ {{ done() }}</strong></div>
+      <div>ระยะทางประมาณ<strong>{{ m().distance.toFixed(2) }} กม.</strong></div>
+      <div>เสร็จประมาณ<strong>{{ route() ? state.timeOf(m().time) + ' น.' : '—' }}</strong></div>
+    </div>
+  </section>
+
+  <div class="status-hint">
+    <i><app-icon name="store" /></i>
+    <span>จุดเริ่มต้น: ร้านอาหาร · ออกส่ง {{ state.settings().depart }} น.</span>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div>
+        <h2>เส้นทางของคุณ</h2>
+        <div class="sub">จัดส่งตามลำดับหมายเลขด้านล่าง</div>
+      </div>
+      <button class="secondary small" (click)="nav.go('navigation')"><app-icon name="navigation" /> นำทาง</button>
+    </div>
+    @for (id of ids(); track id; let i = $index) {
+      <div class="stop">
+        <div class="stop-number">{{ i + 1 }}</div>
+        <div class="stop-text">
+          <h3>{{ customerName(id) }}</h3>
+          <div class="sub">{{ customerAddress(id) }}</div>
+          <p class="sub">{{ orderBoxes(id) }} กล่อง · ถึงประมาณ {{ timeFor(i) }}</p>
+          <app-badge [status]="orderStatus(id)" />
+        </div>
+        <button class="secondary small" (click)="openDelivery(id)">รายละเอียด <app-icon name="arrow" /></button>
+      </div>
+    } @empty {
+      <div class="empty">ยังไม่ได้รับมอบหมายงาน<br />ให้ร้านอาหารคำนวณเส้นทางก่อน</div>
+    }
+    @if (hasAssigned()) {
+      <button style="width:100%;margin-top:20px" (click)="state.startJob()">รับอาหารแล้ว · เริ่มจัดส่ง <app-icon name="arrow" /></button>
+    }
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<h2>{{ id() ? 'แก้ไข' : 'เพิ่ม' }}ลูกค้า</h2>
+<form (submit)="save($event)">
+  <label>ชื่อ</label>
+  <input name="name" [value]="c().name" required maxlength="80" />
+  <label>เบอร์โทรศัพท์</label>
+  <input name="phone" [value]="c().phone" required pattern="[0-9]{10}" inputmode="tel" title="ตัวเลข 10 หลัก" />
+  <label>ที่อยู่</label>
+  <input name="address" [value]="c().address" required maxlength="200" />
+  <div class="two">
+    <div>
+      <label>ละติจูด</label>
+      <input name="lat" type="number" step="any" min="-90" max="90" [value]="c().lat" required #lat />
+    </div>
+    <div>
+      <label>ลองจิจูด</label>
+      <input name="lng" type="number" step="any" min="-180" max="180" [value]="c().lng" required #lng />
+    </div>
+  </div>
+  <label>รายละเอียดจุดส่ง</label>
+  <input name="note" [value]="c().note" maxlength="200" />
+  <div class="picker-actions">
+    <button class="secondary small" type="button" (click)="openPicker()"><app-icon name="target" /> เลือกพิกัดจากแผนที่จริง</button>
+    <span class="sub">แตะตำแหน่งบ้านเพื่อใส่พิกัด</span>
+  </div>
+  <div id="coordinate-picker" class="picker-map" [hidden]="!pickerVisible()" #picker></div>
+  <div class="picker-help">พิกัดต้องอยู่ภายใน 3 กม. จากจุดรับอาหารที่ตั้งไว้</div>
+  <div class="actions">
+    <button type="button" class="secondary" (click)="modal.close()">ยกเลิก</button>
+    <button>บันทึก</button>
+  </div>
+</form>

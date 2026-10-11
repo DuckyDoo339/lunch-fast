@@ -1,0 +1,56 @@
+<div class="mobile-shell">
+  @if (order(); as o) {
+    <app-title-block
+      title="รายละเอียดจัดส่ง"
+      [sub]="'#LF-' + o.id + ' · ใบงาน LF-R' + (state.selected() + 1)"
+    >
+      <button class="secondary" (click)="goJobs()"><app-icon name="back" /> ใบงาน</button>
+    </app-title-block>
+    <section class="card">
+      <div class="section-head">
+        <h2>{{ customer(o)?.name }}</h2>
+        <app-badge [status]="o.status" />
+      </div>
+      <div class="detail">
+        <span>จำนวนอาหาร</span>
+        <strong>{{ o.boxes }} กล่อง</strong>
+      </div>
+      <div class="detail">
+        <span>เบอร์โทรศัพท์</span>
+        <a class="link" [href]="'tel:' + customer(o)?.phone">{{ customer(o)?.phone }} <app-icon name="external" /></a>
+      </div>
+      <div class="detail">
+        <span>ที่อยู่</span>
+        <strong>{{ customer(o)?.address }}</strong>
+      </div>
+      <p style="margin-top:18px">{{ customer(o)?.note }}</p>
+      <p class="sub">พิกัด {{ lat(o) }}, {{ lng(o) }}</p>
+      <a
+        class="link"
+        style="display:block;margin:18px 0"
+        target="_blank"
+        rel="noopener"
+        [href]="mapsHref(o)"
+        ><app-icon name="navigation" /> เปิด Google Maps</a
+      >
+      @if (o.status === 'กำลังจัดส่ง') {
+        <div class="actions">
+          <button class="secondary" (click)="state.updateStatus('ส่งไม่สำเร็จ')">ส่งไม่สำเร็จ</button>
+          <button (click)="state.updateStatus('ส่งสำเร็จ')"><app-icon name="check" /> ส่งสำเร็จ</button>
+        </div>
+      } @else {
+        <div class="note">{{ statusNote(o) }}</div>
+      }
+      @if (o.reason) {
+        <div class="note">หมายเหตุ: {{ o.reason }}</div>
+      }
+    </section>
+    <div class="note">หากลูกค้าไม่อยู่ ให้โทรติดต่อก่อน แล้วบันทึกเหตุผลเมื่อส่งไม่สำเร็จ</div>
+  } @else {
+    <app-title-block title="รายละเอียดจัดส่ง" sub="เลือกงานจากใบงานของฉัน" />
+    <app-rider-select />
+    <div class="card empty">
+      ไม่มีงานจัดส่ง <button (click)="goJobs()">ดูใบงาน</button>
+    </div>
+  }
+</div>

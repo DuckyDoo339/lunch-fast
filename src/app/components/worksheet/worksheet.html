@@ -1,0 +1,21 @@
+<div class="owner-worksheet">
+  <div class="eyebrow">ใบงาน / LF-R{{ id() + 1 }}</div>
+  <h2>{{ riderName() }} · {{ boxes() }} กล่อง</h2>
+  <p class="sub">{{ ids().length }} จุดส่ง · เริ่ม {{ state.settings().depart }} น.</p>
+  <ol class="route-timeline">
+    @for (orderId of ids(); track orderId; let i = $index) {
+      <li>
+        <span class="index">{{ i + 1 }}</span>
+        <div>
+          <strong>{{ customerName(orderId) }}</strong>
+          <div class="sub">
+            {{ orderBoxes(orderId) }} กล่อง · ถึงประมาณ {{ timeAt(i) }} น.<br />{{ customerAddress(orderId) }}
+          </div>
+        </div>
+      </li>
+    }
+  </ol>
+  <div class="actions">
+    <button class="secondary" (click)="modal.close()">ปิดใบงาน</button>
+  </div>
+</div>
