@@ -1,0 +1,17 @@
+export default `<!doctype html>
+<html lang="th" data-beasties-container="">
+<head>
+  <meta charset="utf-8">
+  <title>LunchFlow · ส่งด่วนมื้อเที่ยง</title>
+  <meta name="description" content="LunchFlow สลับร้านค้าและไรเดอร์ได้ทันที จัดออเดอร์ วางเส้นทาง และสรุปกำไร">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" data-beasties-skip="">
+  <script src="/vendor/leaflet/leaflet.js"></script>
+<style>@font-face{font-family:Noto Sans Thai;font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/noto-sans-thai-400.ttf) format("truetype")}@font-face{font-family:Noto Sans Thai;font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/noto-sans-thai-500.ttf) format("truetype")}@font-face{font-family:Noto Sans Thai;font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/noto-sans-thai-600.ttf) format("truetype")}@font-face{font-family:Noto Sans Thai;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/noto-sans-thai-700.ttf) format("truetype")}:root{--accent:#FF6B4A;--accent-dark:#C83E25;--soft:#FFF0EB;--ink:#24262B;--muted:#6F737C;--line:#EBE7E3;--green:#22896b;--orange:var(--accent);--canvas:#FAF8F5;--shadow:0 5px 24px #27352b05}*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font:14px/1.7 Noto Sans Thai,sans-serif}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style><link rel="stylesheet" href="styles-PDSHXZGY.css" media="print" data-beasties-media="all"><noscript><link rel="stylesheet" href="styles-PDSHXZGY.css"></noscript></head>
+<body ngcm="">
+  <app-root></app-root>
+<script src="main-FAGQIYCX.js" type="module"></script><script>document.querySelectorAll('link[data-beasties-media]').forEach(function(l){l.media=l.getAttribute('data-beasties-media');l.removeAttribute('data-beasties-media')})</script></body>
+</html>
+`;
