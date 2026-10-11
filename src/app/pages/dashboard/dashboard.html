@@ -1,0 +1,103 @@
+<app-title-block title="ภาพรวมมื้อเที่ยงวันนี้" [sub]="dateText() + ' · จัดการทุกการส่งในที่เดียว'">
+  <button (click)="nav.go('routes')"><app-icon name="routes" /> &nbsp; จัดเส้นทางอัตโนมัติ</button>
+</app-title-block>
+
+<section class="dispatch-hero">
+  <div>
+    <div class="hero-overline">TODAY’S LUNCH SERVICE</div>
+    <h2>ทุกมื้อเที่ยง พร้อมส่งตรงเวลา</h2>
+    <p>{{ state.activeOrders().length }} ออเดอร์ · {{ t().boxes }} กล่อง · {{ state.routes().length }} ใบงานในรอบนี้</p>
+    <p class="hero-chip">{{ waiting() ? waiting() + ' ออเดอร์รอจัดสรร' : 'แผนจัดส่งพร้อมสำหรับทีมไรเดอร์' }}</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-time">
+      <div class="label">เริ่มออกส่ง</div>
+      <strong>{{ state.settings().depart }}</strong>
+      <small>จุดรับอาหารที่ร้าน</small>
+    </div>
+    <div class="hero-line"></div>
+    <div class="hero-time">
+      <div class="label">เป้าหมายถึงลูกค้า</div>
+      <strong style="color:#f5bc8e">12:30</strong>
+      <small>ส่งก่อนเวลามื้อเที่ยง</small>
+    </div>
+  </div>
+</section>
+
+<app-stats [links]="statLinks" />
+
+<section class="live-progress">
+  <div>
+    <h3>ติดตามรอบส่งวันนี้</h3>
+    <div class="sub">ส่งสำเร็จ {{ done() }} · กำลังส่ง {{ shipping() }} · ต้องติดตาม {{ failed() }}</div>
+  </div>
+  <div class="delivery-meter">
+    <div class="meter-label">
+      <span>ความคืบหน้าการส่ง</span>
+      <strong>{{ pct() }}%</strong>
+    </div>
+    <div class="progress">
+      <span [style.width.%]="pct()"></span>
+    </div>
+  </div>
+  <button class="secondary" (click)="nav.go('orders')">ดูออเดอร์ →</button>
+</section>
+
+<div class="finance-strip">
+  <section class="card"><span class="sub">ต้นทุนอาหาร</span><strong>฿{{ state.money(t().food) }}</strong></section>
+  <section class="card"><span class="sub">ค่าจ้างและค่าส่ง</span><strong>฿{{ state.money(t().wages + t().delivery) }}</strong></section>
+  <section class="card"><span class="sub">ต้นทุนรวม</span><strong>฿{{ state.money(t().food + t().wages + t().delivery) }}</strong></section>
+</div>
+
+<div class="grid">
+  <section class="card">
+    <div class="section-head">
+      <div>
+        <h2>ภาพรวมการจัดส่ง</h2>
+        <div class="sub">พื้นที่ให้บริการรอบ มมส. · ประมาณ 3 กิโลเมตร</div>
+      </div>
+      <span class="live"><app-icon name="location" /> {{ state.routes().length }} เส้นทาง</span>
+    </div>
+    <app-live-map [only]="null" />
+  </section>
+  <section class="card">
+    <div class="section-head">
+      <div>
+        <h2>ทีมไรเดอร์</h2>
+        <div class="sub">ติดตามใบงานและความคืบหน้า</div>
+      </div>
+      <button class="secondary small" (click)="nav.go('routes')">ดูใบงาน <app-icon name="external" /></button>
+    </div>
+    <app-rider-list />
+    <p class="sub" style="margin-top:18px">
+      ไรเดอร์ทั้งหมด {{ state.riders().length }} คน · สูงสุด {{ state.riders().length * 3 }} ออเดอร์ต่อรอบ
+    </p>
+  </section>
+</div>
+
+<div class="banner" [class.error]="lateCount() > 0" [class.attention]="lateCount() === 0 && state.routes().length === 0">
+  <span class="symbol"><app-icon [name]="lateCount() ? 'alert' : 'check'" /></span>
+  <div>
+    <strong>{{
+      state.routes().length
+        ? (lateCount() ? lateCount() + ' เส้นทางอาจส่งไม่ทัน' : 'ทุกเส้นทางคาดว่าจะส่งทัน 12:30 น.')
+        : 'พร้อมวางแผนมื้อเที่ยงแล้ว'
+    }}</strong>
+    <p>
+      ออกจากร้าน {{ state.settings().depart }} น. · ความเร็วประมาณ 30 กม./ชม. · เผื่อส่ง
+      {{ state.settings().delay }} นาที / จุด
+    </p>
+  </div>
+  <button (click)="nav.go('routes')">ตรวจสอบเส้นทาง <app-icon name="arrow" /></button>
+</div>
+
+<section class="card">
+  <div class="section-head">
+    <div>
+      <h2>ออเดอร์ล่าสุด</h2>
+      <div class="sub">รายการที่ต้องจัดส่งในรอบมื้อเที่ยง</div>
+    </div>
+    <button class="secondary small" (click)="nav.go('orders')">ดูทั้งหมด <app-icon name="arrow" /></button>
+  </div>
+  <app-order-table [orders]="recentOrders()" />
+</section>

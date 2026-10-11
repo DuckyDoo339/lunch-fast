@@ -1,0 +1,94 @@
+<app-title-block title="รายงานและสรุปกำไร" sub="ประมาณการรอบมื้อเที่ยง · ข้อมูลอัปเดตจากออเดอร์และใบงาน">
+  <button class="secondary" (click)="state.exportCSV()"><app-icon name="download" /> ดาวน์โหลด CSV</button>
+</app-title-block>
+
+<app-stats />
+
+<div class="two">
+  <section class="card">
+    <h2>รายรับและต้นทุน</h2>
+    <div class="detail">
+      <span>ยอดขาย ({{ t().boxes }} × 65 บาท)</span>
+      <strong>฿{{ state.money(t().sales) }}</strong>
+    </div>
+    <div class="detail">
+      <span>ต้นทุนอาหาร ({{ t().boxes }} × 40 บาท)</span>
+      <strong>฿{{ state.money(t().food) }}</strong>
+    </div>
+    <div class="detail">
+      <span>ค่าเรียกไรเดอร์ ({{ state.routes().length }} ใบงาน × 15 บาท)</span>
+      <strong>฿{{ state.money(t().wages) }}</strong>
+    </div>
+    <div class="detail">
+      <span>ค่าส่งตามระยะทางถึงแต่ละจุด</span>
+      <strong>฿{{ state.money(t().delivery) }}</strong>
+    </div>
+    <div class="detail">
+      <strong>{{ t().profit < 0 ? 'ขาดทุนโดยประมาณ' : 'กำไรโดยประมาณ' }}</strong>
+      <strong [style.color]="t().profit < 0 ? '#c34a44' : 'var(--green)'" style="font-size:22px"
+        >฿{{ state.money(abs(t().profit)) }}</strong
+      >
+    </div>
+    <div class="note">
+      กำไร = ยอดขาย − ต้นทุนอาหาร − ค่าเรียกไรเดอร์ − ค่าส่ง<br />ค่าส่งแต่ละออเดอร์ =
+      ระยะสะสมจากร้านถึงจุดส่ง × จำนวนกล่อง × 2 บาท<br />สมมติค่าเรียก 15 บาทต่อใบงาน
+      ค่าส่งเป็นค่าใช้จ่ายของร้าน ไม่รวมขากลับ และยังไม่ใช่ราคาจากผู้ให้บริการจริง ·
+      ระยะทางใช้ถนนจริงเมื่อโหลดสำเร็จ หากยังไม่สำเร็จใช้ค่าประมาณเส้นตรง
+    </div>
+  </section>
+  <section class="card">
+    <h2>ภาพรวมการจัดส่ง</h2>
+    <div class="detail">
+      <span>ระยะทางรวม</span>
+      <strong>{{ t().distance.toFixed(2) }} กม.</strong>
+    </div>
+    <div class="detail">
+      <span>เวลารวมของทุกใบงาน</span>
+      <strong>{{ ceil(t().minutes) }} นาที</strong>
+    </div>
+    <div class="detail">
+      <span>ใบงานที่เสี่ยงล่าช้า</span>
+      <strong>{{ lateCount() }} ใบงาน</strong>
+    </div>
+    <h3 style="margin-top:28px">ระยะทางแต่ละไรเดอร์</h3>
+    @for (r of state.routes(); track r.rider) {
+      <div class="barrow">
+        <label>{{ riderName(r.rider) }}</label>
+        <div class="bar">
+          <div [style.width.%]="barWidth(r.ids)" [style.background]="colors[r.rider % 8]"></div>
+        </div>
+        <span>{{ state.routeMetrics(r.ids).distance.toFixed(1) }} กม.</span>
+      </div>
+    } @empty {
+      <p class="sub">ยังไม่มีใบงาน</p>
+    }
+  </section>
+</div>
+
+<section class="card" style="margin-top:22px">
+  <h2>ที่มาของค่าส่ง</h2>
+  <p class="sub">{{ state.roadSummary() }} · เวลาประมาณที่ 30 กม./ชม.</p>
+  <p class="sub">ตัวอย่าง: 6 กล่อง × 2 กม. × 2 บาท = 24 บาท + ค่าเรียก 15 บาท = 39 บาท</p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ใบงาน / ออเดอร์</th>
+          <th>ระยะสะสม</th>
+          <th>กล่อง</th>
+          <th>ค่าส่ง</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of costRows(); track row.key) {
+          <tr>
+            <td>LF-R{{ row.rider + 1 }} / #LF-{{ row.id }}</td>
+            <td>{{ row.d.toFixed(2) }} กม.</td>
+            <td>{{ row.boxes }}</td>
+            <td>฿{{ state.money(row.cost) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

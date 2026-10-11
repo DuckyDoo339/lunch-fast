@@ -1,0 +1,30 @@
+<section class="card route-card">
+  <div class="section-head">
+    <h3><i class="dot" [style.background]="color()"></i>{{ riderName() }} · LF-R{{ route().rider + 1 }}</h3>
+    <app-badge [status]="late() ? 'อาจส่งไม่ทัน' : 'ทันเวลา'" />
+  </div>
+  <div class="sub">
+    {{ route().ids.length }}/3 ออเดอร์ · {{ boxes() }} กล่อง · {{ metrics().distance.toFixed(2) }} กม.<br />
+    {{ metrics().source === 'road' ? 'ระยะทางถนนจริง' : 'ระยะเส้นตรงประมาณการ' }} · {{ minutes() }} นาที
+  </div>
+  <ol class="route-timeline">
+    @for (id of route().ids; track id; let i = $index) {
+      <li>
+        <span class="index">{{ i + 1 }}</span>
+        <div>
+          <strong>{{ customerName(id) }}</strong>
+          <div class="sub">
+            {{ orderBoxes(id) }} กล่อง · ถึงประมาณ {{ timeAt(i) }} น.<br />{{ customerAddress(id) }}
+          </div>
+        </div>
+      </li>
+    }
+  </ol>
+  <div class="section-head" style="margin:0">
+    <span class="sub">เสร็จประมาณ <strong>{{ state.timeOf(metrics().time) }}</strong></span>
+    <button class="secondary small" (click)="previewWorksheet()">ดูใบงาน <app-icon name="external" /></button>
+  </div>
+  @if (late()) {
+    <p class="sub" style="color:#c34a44">ถึงตั้งแต่ 12:30 น. · ควรออกส่งเร็วขึ้นหรือปรับการแบ่งงาน</p>
+  }
+</section>

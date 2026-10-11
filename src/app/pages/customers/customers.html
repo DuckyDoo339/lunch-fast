@@ -1,0 +1,48 @@
+<app-title-block title="ข้อมูลลูกค้า" sub="จัดการข้อมูลติดต่อและพิกัดจุดส่ง">
+  <button (click)="modal.openCustomer()"><app-icon name="plus" /> เพิ่มลูกค้า</button>
+</app-title-block>
+
+<div class="toolbar">
+  <input
+    placeholder="ค้นหาชื่อ เบอร์โทร หรือที่อยู่"
+    [value]="query()"
+    (input)="query.set($any($event.target).value)"
+    aria-label="ค้นหาลูกค้า"
+  />
+</div>
+
+<div class="grid">
+  <section class="card" id="customerlist">
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ลูกค้า</th>
+            <th>ที่อยู่ / พิกัด</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of list(); track c.id) {
+            <tr>
+              <td>{{ c.name }}<div class="sub">{{ c.phone }}</div></td>
+              <td>
+                {{ c.address }}
+                <div class="sub">{{ c.lat.toFixed(5) }}, {{ c.lng.toFixed(5) }}</div>
+              </td>
+              <td>
+                <button class="secondary small" (click)="modal.openCustomer(c.id)">แก้ไข</button>&nbsp;
+                <button class="secondary small" (click)="state.removeCustomer(c.id)">ลบ</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>ตำแหน่งลูกค้า</h2>
+    <p class="sub">เลือกพิกัดจริงของลูกค้าจากแผนที่ได้</p>
+    <app-live-map [only]="-1" />
+  </section>
+</div>

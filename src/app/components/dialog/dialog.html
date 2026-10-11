@@ -1,0 +1,18 @@
+<dialog id="modal" #dialogEl>
+  @if (modal.current(); as m) {
+    @switch (m.kind) {
+      @case ('customer') {
+        <app-customer-form [id]="m.id ?? null" />
+      }
+      @case ('order') {
+        <app-order-form [id]="m.id ?? null" />
+      }
+      @case ('shop') {
+        <app-shop-form />
+      }
+      @case ('worksheet') {
+        <app-worksheet [id]="m.id" />
+      }
+    }
+  }
+</dialog>

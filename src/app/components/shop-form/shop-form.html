@@ -1,0 +1,19 @@
+<h2>จุดรับอาหารที่ร้าน</h2>
+<form (submit)="save($event)">
+  <p class="sub">ใช้พิกัดจริงของร้านเป็นจุดเริ่มต้นทุกใบงาน</p>
+  <div class="two">
+    <div>
+      <label>ละติจูด</label>
+      <input name="lat" type="number" min="-90" max="90" step="any" required [value]="state.shop().lat" />
+    </div>
+    <div>
+      <label>ลองจิจูด</label>
+      <input name="lng" type="number" min="-180" max="180" step="any" required [value]="state.shop().lng" />
+    </div>
+  </div>
+  <div class="form-note">หากมีงานที่เริ่มส่งแล้ว ต้องจัดการใบงานนั้นให้เสร็จก่อนเปลี่ยนจุดรับอาหาร</div>
+  <div class="actions">
+    <button type="button" class="secondary" (click)="modal.close()">ปิด</button>
+    <button>บันทึกจุดรับอาหาร</button>
+  </div>
+</form>

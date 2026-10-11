@@ -1,0 +1,44 @@
+<app-title-block title="จัดเส้นทางและแบ่งงาน" sub="วางแผนจากจุดรับอาหารที่ร้าน · สูงสุด 3 ออเดอร์ต่อไรเดอร์">
+  <button class="secondary" (click)="state.calculate(true)"><app-icon name="refresh" /> คำนวณใหม่</button>
+  <button (click)="state.calculate()"><app-icon name="routes" /> คำนวณเส้นทาง</button>
+</app-title-block>
+
+<div class="toolbar">
+  <label>เวลาออกส่ง <input type="time" [value]="state.settings().depart" (change)="setDepart($event)" /></label>
+  <label>
+    เวลาต่อจุด (นาที)
+    <input style="width:80px" type="number" min="0" max="30" [value]="state.settings().delay" (change)="setDelay($event)" />
+  </label>
+  <span class="badge status-primary">กำหนดส่งก่อน 12:30 น.</span>
+  <button class="secondary" (click)="modal.openShop()"><app-icon name="store" /> ตั้งจุดรับอาหาร</button>
+</div>
+
+<div class="grid">
+  <section class="card">
+    <div class="section-head">
+      <div>
+        <h2>แผนการจัดส่ง</h2>
+        <div class="sub">จัดกลุ่มตามมุมพิกัด และเลือกจุดใกล้ที่สุดในแต่ละกลุ่ม</div>
+      </div>
+      <span class="badge">{{ state.routes().length }} ใบงาน</span>
+    </div>
+    <app-live-map [only]="null" />
+    <div class="note">
+      ใช้ระยะทางถนนจาก OSRM เมื่อโหลดสำเร็จ เส้นประและใบงานที่ยังไม่ได้ข้อมูลใช้ระยะเส้นตรงชั่วคราว
+      เวลาใช้ความเร็ว 30 กม./ชม. และเวลาส่งต่อจุด ไม่รวมจราจรสด<br />คำนวณใหม่จะคงใบงานที่เริ่มส่งแล้วไว้
+    </div>
+  </section>
+  <section>
+    @if (state.routes().length) {
+      @for (r of state.routes(); track r.rider) {
+        <app-route-card [route]="r" />
+      }
+    } @else {
+      <div class="card empty">กด “คำนวณเส้นทาง” เพื่อสร้างใบงาน</div>
+    }
+  </section>
+</div>
+
+@if (waiting() > 0) {
+  <div class="note">มี {{ waiting() }} ออเดอร์รอจัดสรร หากเกินความจุของทีม ต้องเพิ่มไรเดอร์หรือปรับรอบส่ง</div>
+}

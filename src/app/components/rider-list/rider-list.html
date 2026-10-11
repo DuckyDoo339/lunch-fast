@@ -1,0 +1,15 @@
+@for (r of state.riders(); track r.id) {
+  <div class="rider-row">
+    <div class="rider-avatar" [style.color]="color(r.id)" [style.background]="color(r.id) + '15'">
+      {{ r.name[0] }}
+    </div>
+    <div class="rider-info">
+      <strong>{{ r.name }}</strong>
+      <div class="sub">{{ info(r.id) }}</div>
+      <div class="progress">
+        <span [style.width.%]="progress(r.id)" [style.background]="color(r.id)"></span>
+      </div>
+    </div>
+    <app-badge [status]="status(r.id)" />
+  </div>
+}

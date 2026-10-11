@@ -1,0 +1,32 @@
+<h2>{{ id() ? 'แก้ไขออเดอร์ #LF-' + id() : 'เพิ่มออเดอร์' }}</h2>
+<form (submit)="save($event)">
+  <label>ลูกค้า</label>
+  <select name="customer" [disabled]="started()">
+    @for (c of state.customers(); track c.id) {
+      <option [value]="c.id" [selected]="c.id === o().customer">{{ c.name }}</option>
+    }
+  </select>
+  <label>จำนวนข้าวกล่อง (ไม่เกิน 3)</label>
+  <input name="boxes" type="number" min="1" max="3" [value]="o().boxes" required [disabled]="started()" />
+  <div class="status-field">
+    <label>สถานะออเดอร์ <app-badge [status]="status()" /></label>
+    <select name="status" (change)="status.set($any($event.target).value)">
+      @for (s of statuses; track s) {
+        <option [value]="s" [selected]="s === status()">{{ s }}</option>
+      }
+    </select>
+  </div>
+  <div id="reason-field" [hidden]="!reasonShown()">
+    <label>เหตุผล / หมายเหตุ <span class="required-mark">กรุณาระบุเมื่อส่งไม่สำเร็จหรือยกเลิก</span></label>
+    <textarea name="reason" maxlength="300" placeholder="เช่น ลูกค้าไม่อยู่ ติดต่อไม่ได้ หรือยกเลิกโดยลูกค้า">{{ o().reason }}</textarea>
+  </div>
+  <div class="form-note">
+    {{ routeNote() }}<br />
+    {{ started() ? 'งานเริ่มส่งแล้ว เปลี่ยนสถานะและหมายเหตุได้ โดยคงข้อมูลลูกค้าและจำนวนกล่องไว้' : 'หากเปลี่ยนลูกค้าหรือจำนวนกล่อง ระบบจะให้จัดเส้นทางใหม่' }}<br />
+    รอจัดส่งหรือยกเลิก: นำออเดอร์ออกจากใบงานเดิม
+  </div>
+  <div class="actions">
+    <button type="button" class="secondary" (click)="modal.close()">ปิด</button>
+    <button>บันทึกการเปลี่ยนแปลง</button>
+  </div>
+</form>

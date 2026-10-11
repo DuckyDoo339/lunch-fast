@@ -1,0 +1,26 @@
+<app-title-block title="จัดการออเดอร์" sub="ตรวจสอบ แก้ไข และเตรียมรายการสำหรับจัดส่ง">
+  <button class="secondary" (click)="state.simulate()"><app-icon name="plus" /> จำลองออเดอร์</button>
+  <button (click)="modal.openOrder()"><app-icon name="plus" /> เพิ่มออเดอร์</button>
+</app-title-block>
+
+<app-stats />
+
+<section class="card">
+  <div class="toolbar">
+    <input
+      aria-label="ค้นหาออเดอร์"
+      placeholder="ค้นหาเลขออเดอร์ หรือชื่อลูกค้า"
+      [value]="query()"
+      (input)="query.set($any($event.target).value)"
+    />
+    <select aria-label="กรองสถานะ" [value]="filter()" (change)="filter.set($any($event.target).value)">
+      <option value="all">ทุกสถานะ</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+  </div>
+  <div id="orderlist">
+    <app-order-table [orders]="filtered()" [actions]="true" />
+  </div>
+</section>

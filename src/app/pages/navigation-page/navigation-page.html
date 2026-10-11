@@ -1,0 +1,22 @@
+<div class="mobile-shell">
+  <app-title-block title="แผนที่นำทาง" sub="เรียงจุดส่งจากร้านตามใบงานที่เลือก" />
+  <app-rider-select />
+
+  <section class="card">
+    <app-live-map [only]="state.selected()" />
+    @for (id of ids(); track id; let i = $index) {
+      <div class="stop">
+        <div class="stop-number">{{ i + 1 }}</div>
+        <div class="stop-text">
+          <h3>{{ customerName(id) }}</h3>
+          <p class="sub">{{ customerAddress(id) }} · {{ orderBoxes(id) }} กล่อง</p>
+          <a class="link" target="_blank" rel="noopener" [href]="mapsHref(id)">เปิด Google Maps <app-icon name="external" /></a>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty">ไม่มีเส้นทางสำหรับไรเดอร์คนนี้</div>
+    }
+  </section>
+
+  <div class="note">พิกัดตัวอย่างสำหรับทดสอบ ตรวจสอบและแก้ไขพิกัดลูกค้าก่อนนำทางจริง</div>
+</div>
